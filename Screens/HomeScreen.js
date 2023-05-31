@@ -14,9 +14,13 @@ import Logo from "../components/Logo";
 import Course from "../components/Course";
 import Menu from "../components/Menu";
 import { connect } from "react-redux";
+import Avatar from "../components/Avatar";
 
 function mapStateToProps(state) {
-  return { action: state.action };
+  return {
+    action: state.action,
+    name: state.name,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -29,6 +33,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 class HomeScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
+
   state = {
     scale: new Animated.Value(1),
     opacity: new Animated.Value(1),
@@ -51,6 +59,7 @@ class HomeScreen extends React.Component {
         duration: 300,
         easing: Easing.in(),
       }).start();
+
       Animated.spring(this.state.opacity, {
         toValue: 0.5,
       }).start();
@@ -63,6 +72,7 @@ class HomeScreen extends React.Component {
         duration: 300,
         easing: Easing.in(),
       }).start();
+
       Animated.spring(this.state.opacity, {
         toValue: 1,
       }).start();
@@ -89,10 +99,10 @@ class HomeScreen extends React.Component {
                   onPress={this.props.openMenu}
                   style={{ position: "absolute", top: 0, left: 20 }}
                 >
-                  <Avatar source={require("../assets/avatar.jpg")} />
+                  <Avatar />
                 </TouchableOpacity>
                 <Title>Welcome back,</Title>
-                <Name>Dee</Name>
+                <Name>{this.props.name}</Name>
                 <NotificationIcon
                   style={{ position: "absolute", right: 20, top: 5 }}
                 />
@@ -116,14 +126,22 @@ class HomeScreen extends React.Component {
                 showsHorizontalScrollIndicator={false}
               >
                 {cards.map((card, index) => (
-                  <Card
+                  <TouchableOpacity
                     key={index}
-                    title={card.title}
-                    image={card.image}
-                    subtitle={card.subtitle}
-                    caption={card.caption}
-                    logo={card.logo}
-                  />
+                    onPress={() => {
+                      this.props.navigation.push("Section", {
+                        Section: card,
+                      });
+                    }}
+                  >
+                    <Card
+                      title={card.title}
+                      image={card.image}
+                      subtitle={card.subtitle}
+                      caption={card.caption}
+                      logo={card.logo}
+                    />
+                  </TouchableOpacity>
                 ))}
               </ScrollView>
               {/* Section Header */}
@@ -165,17 +183,11 @@ const Subtitle = styled.Text`
   text-transform: uppercase;
 `;
 
-const Avatar = styled.Image`
-  width: 44px;
-  height: 44px;
-  background: black;
-  border-radius: 22px;
-`;
-
 const Container = styled.View`
   flex: 1;
   background-color: #f0f3f5;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `;
 
 const AnimatedContainer = Animated.createAnimatedComponent(Container);
