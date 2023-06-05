@@ -21,9 +21,10 @@ const HomeStack = createStackNavigator(
 HomeStack.navigationOptions = ({ navigation }) => {
   var tabBarVisible = true;
 
-  // detect the screen you are on and determine to show or hide tabbar
+  // detect the screen you are on
   const routeName = navigation.state.routes[navigation.state.index].routeName;
 
+  // determine whether to show or hide tabBar
   if (routeName == "Section") {
     tabBarVisible = false;
   }
